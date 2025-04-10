@@ -27,7 +27,8 @@ yarn add @status-im/react-native-transparent-video
 ## Usage
 
 ```js
-import TransparentVideo from '@status-im/react-native-transparent-video';
+import { View, ImageSourcePropType, StyleSheet } from "react-native";
+import TransparentVideo from 'react-native-transparent-video';
 
 const video = require('../assets/video.mp4');
 
