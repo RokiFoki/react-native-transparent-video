@@ -79,6 +79,8 @@ public class AlphaMovieView extends GLTextureView {
 
     private PlayerState state = PlayerState.NOT_PREPARED;
 
+    private boolean shouldLoop;
+
     final Handler handler = new Handler();
     final Runnable timeDetector = new Runnable() {
         public void run() {
@@ -135,7 +137,7 @@ public class AlphaMovieView extends GLTextureView {
     private void initMediaPlayer() {
         mediaPlayer = new MediaPlayer();
         setScreenOnWhilePlaying(true);
-        setLooping(true);
+        setLooping(shouldLoop);
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -148,6 +150,11 @@ public class AlphaMovieView extends GLTextureView {
                     } else {
                         mediaPlayer.seekTo((int) loopStartMs);
                     }
+                    mediaPlayer.start();
+                    return;
+                } 
+                else if (loopStartMs == -1 && loopEndMs == -1 && shouldLoop) {
+                    mediaPlayer.seekTo(0);
                     mediaPlayer.start();
                     return;
                 }
@@ -165,6 +172,7 @@ public class AlphaMovieView extends GLTextureView {
             this.isPacked = arr.getBoolean(R.styleable.AlphaMovieView_packed, false);
             this.loopStartMs = arr.getInteger(R.styleable.AlphaMovieView_loopStartMs, -1);
             this.loopEndMs = arr.getInteger(R.styleable.AlphaMovieView_loopEndMs, -1);
+            this.shouldLoop = arr.getBoolean(R.styleable.AlphaMovieView_loop, true);
             updateMediaPlayerLoopSetting();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 this.loopSeekingMethod = arr.getInteger(R.styleable.AlphaMovieView_loopSeekingMethod, MediaPlayer.SEEK_CLOSEST_SYNC);
@@ -271,9 +279,11 @@ public class AlphaMovieView extends GLTextureView {
     }
 
     private void updateMediaPlayerLoopSetting() {
-        if (loopStartMs >= 0 || loopEndMs >= 0) {
+        if (!shouldLoop && (loopStartMs >= 0 || loopEndMs >= 0)) {
             // Disable MediaPlayer's built in looping if manual loop section is specified
             setLooping(false);
+        } else {
+            setLooping(shouldLoop); // fallback to normal looping
         }
     }
 
@@ -540,7 +550,13 @@ public class AlphaMovieView extends GLTextureView {
     }
 
     public void setLooping(boolean looping) {
+        this.shouldLoop = looping;
         mediaPlayer.setLooping(looping);
+    }
+
+    public void setLoop(boolean loop) {
+        this.shouldLoop = loop;
+        updateMediaPlayerLoopSetting();
     }
 
     public int getCurrentPosition() {

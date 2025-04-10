@@ -43,6 +43,11 @@ public class TransparentVideoViewManager extends SimpleViewManager<LinearLayout>
   @NonNull
   public LinearLayout createViewInstance(ThemedReactContext reactContext) {
     LinearLayout view = new LinearLayout(this.reactContext);
+    AlphaMovieView alphaMovieView = new AlphaMovieView(reactContext, null);
+    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+    lp.gravity = Gravity.CENTER;
+    alphaMovieView.setLayoutParams(lp);
+    view.addView(alphaMovieView);
     sInstances.add(view);
     return view;
   }
@@ -75,5 +80,13 @@ public class TransparentVideoViewManager extends SimpleViewManager<LinearLayout>
       Log.e(TAG + " setSrc", e.getMessage(), e);
       alphaMovieView.setVideoByUrl(file);
     }
+  }
+
+  @ReactProp(name = "loop", defaultBoolean = true)
+  public void setLoop(LinearLayout view, boolean loop) {
+      AlphaMovieView alphaMovieView = (AlphaMovieView)view.getChildAt(0);
+      if (alphaMovieView != null) {
+          alphaMovieView.setLoop(loop);
+      }
   }
 }

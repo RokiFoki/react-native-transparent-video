@@ -9,5 +9,6 @@
     <attr name="packed" format="boolean" />
     <attr name="shader" format="string" />
     <attr name="accuracy" format="float" />
+    <attr name="loop" format="boolean" />
   </declare-styleable>
 </resources>
