@@ -31,17 +31,6 @@ https://github.com/status-im/react-native-transparent-video/assets/18485527/69ea
 
 To achieve best compatibility across different Android devices and versions, please check the [video encoding recommendations](https://developer.android.com/guide/topics/media/media-formats#video-encoding) from the Android documentation portal.
 
-## Installation
-
-```sh
-npm install @status-im/react-native-transparent-video
-```
-
-or
-
-```sh
-yarn add @status-im/react-native-transparent-video
-```
 
 ## Usage
 
@@ -49,23 +38,24 @@ yarn add @status-im/react-native-transparent-video
 import { View, ImageSourcePropType, StyleSheet } from "react-native";
 import TransparentVideo from 'react-native-transparent-video';
 
-const video = require('../assets/video.mp4');
+type IVideoPlayer = {
+    videoSrc: ImageSourcePropType
+    videoStyle?: ViewStyle
+    loop?: boolean;
+}
 
-function App() {
+export default function VideoPlayer(props: IVideoPlayer) {
   return (
     <View>
-      <TransparentVideo source={video} style={styles.transparentVideo} />
+      <TransparentVideo source={props.videoSrc} style={[styles.transparentVideo, props.videoStyle]} loop={props.loop}/>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   transparentVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    height: 300,
+    width: 300
   },
 });
 ```
