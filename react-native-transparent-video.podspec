@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
 
   s.platforms    = { :ios => "11.0" }
-  s.source       = { :git => "https://github.com/Thanhal-P-A/react-native-transparent-video.git", :branch => "main" }
+  s.source       = { :git => "https://github.com/RokiFoki/react-native-transparent-video.git", :branch => "main" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 

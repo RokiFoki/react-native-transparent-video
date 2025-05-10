@@ -6,6 +6,7 @@ export interface TransparentVideoProps {
   source?: any;
   loop?: boolean;
   autoplay?: boolean;
+  onEnd?: () => void;
 }
 
 declare class TransparentVideo extends React.PureComponent<TransparentVideoProps> {}

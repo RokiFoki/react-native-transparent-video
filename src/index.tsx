@@ -7,6 +7,7 @@ type TransparentVideoProps = {
   style: StyleProp<ViewStyle>;
   source?: any;
   loop?: boolean;
+  onEnd?: () => void;
 };
 
 const ComponentName = 'TransparentVideoView';
@@ -15,7 +16,9 @@ const TransparentVideoView = requireNativeComponent(ComponentName);
 
 class TransparentVideo extends React.PureComponent<TransparentVideoProps> {
   render() {
-    const source = resolveAssetSource(this.props.source) || {};
+    const source = resolveAssetSource(this.props.source) || {
+      uri: this.props.source,
+    };
     let uri = source.uri || '';
     if (uri && uri.match(/^\//)) {
       uri = `file://${uri}`;
@@ -29,6 +32,7 @@ class TransparentVideo extends React.PureComponent<TransparentVideoProps> {
         type: source.type || '',
       },
       loop: nativeProps.loop ?? true,
+      onVideoEnd: this.props.onEnd,
     });
 
     return <TransparentVideoView {...nativeProps} />;
