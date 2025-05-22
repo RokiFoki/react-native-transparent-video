@@ -2,6 +2,12 @@ package com.transparentvideo;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.common.MapBuilder;
+
+import java.util.Map;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +20,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.UIManagerHelper;
+import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.bridge.ReadableMap;
 
 import java.util.ArrayList;
@@ -47,6 +55,17 @@ public class TransparentVideoViewManager extends SimpleViewManager<LinearLayout>
     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
     lp.gravity = Gravity.CENTER;
     alphaMovieView.setLayoutParams(lp);
+
+    alphaMovieView.setOnVideoEndedListener(() -> {
+      EventDispatcher ed = UIManagerHelper.getEventDispatcherForReactTag(
+        reactContext,
+        alphaMovieView.getId()
+      );
+      if (ed != null) {
+        ed.dispatchEvent(new VideoEndEvent(alphaMovieView.getId()));
+      }
+    });
+
     view.addView(alphaMovieView);
     sInstances.add(view);
     return view;
@@ -84,9 +103,17 @@ public class TransparentVideoViewManager extends SimpleViewManager<LinearLayout>
 
   @ReactProp(name = "loop", defaultBoolean = true)
   public void setLoop(LinearLayout view, boolean loop) {
-      AlphaMovieView alphaMovieView = (AlphaMovieView)view.getChildAt(0);
-      if (alphaMovieView != null) {
-          alphaMovieView.setLoop(loop);
-      }
+    AlphaMovieView alphaMovieView = (AlphaMovieView)view.getChildAt(0);
+    if (alphaMovieView != null) {
+      alphaMovieView.setLoop(loop);
+    }
+  }
+
+  @Override
+  public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+    return MapBuilder.of(
+      "onEnd", // rename to align with JS
+      MapBuilder.of("registrationName", "onEnd")
+    );
   }
 }
