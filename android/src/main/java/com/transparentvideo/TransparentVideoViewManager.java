@@ -47,6 +47,13 @@ public class TransparentVideoViewManager extends SimpleViewManager<LinearLayout>
     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
     lp.gravity = Gravity.CENTER;
     alphaMovieView.setLayoutParams(lp);
+
+    alphaMovieView.setOnVideoEndedListener(() -> {
+      ((ReactContext) reactContext)
+          .getJSModule(RCTEventEmitter.class)
+          .receiveEvent(alphaMovieView.getId(), "onVideoEnd", null);
+    });
+
     view.addView(alphaMovieView);
     sInstances.add(view);
     return view;
@@ -88,5 +95,13 @@ public class TransparentVideoViewManager extends SimpleViewManager<LinearLayout>
       if (alphaMovieView != null) {
           alphaMovieView.setLoop(loop);
       }
+  }
+
+  @Override
+  public Map getExportedCustomDirectEventTypeConstants() {
+      return MapBuilder.of(
+          "onVideoEnd",
+          MapBuilder.of("registrationName", "onVideoEnd")
+      );
   }
 }
