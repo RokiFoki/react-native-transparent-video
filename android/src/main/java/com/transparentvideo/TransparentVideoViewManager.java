@@ -24,6 +24,7 @@ import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.bridge.ReadableMap;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,13 +58,9 @@ public class TransparentVideoViewManager extends SimpleViewManager<LinearLayout>
     alphaMovieView.setLayoutParams(lp);
 
     alphaMovieView.setOnVideoEndedListener(() -> {
-      EventDispatcher ed = UIManagerHelper.getEventDispatcherForReactTag(
-        reactContext,
-        alphaMovieView.getId()
-      );
-      if (ed != null) {
-        ed.dispatchEvent(new VideoEndEvent(alphaMovieView.getId()));
-      }
+      ((ReactContext) this.reactContext)
+      .getJSModule(RCTEventEmitter.class)
+      .receiveEvent(alphaMovieView.getId(), "onEnd", null);
     });
 
     view.addView(alphaMovieView);
