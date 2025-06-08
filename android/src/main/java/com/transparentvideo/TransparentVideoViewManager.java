@@ -48,6 +48,7 @@ public class TransparentVideoViewManager extends SimpleViewManager<LinearLayout>
     return REACT_CLASS;
   }
 
+  private boolean eventDispatching = false;
   @Override
   @NonNull
   public LinearLayout createViewInstance(ThemedReactContext reactContext) {
