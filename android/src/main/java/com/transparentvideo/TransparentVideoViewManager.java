@@ -64,9 +64,9 @@ public class TransparentVideoViewManager extends SimpleViewManager<LinearLayout>
 
       eventDispatching = true;
     
-      ((ReactContext) this.reactContext)
-        .getJSModule(RCTEventEmitter.class)
-        .receiveEvent(alphaMovieView.getId(), "onEnd", null);
+      // ((ReactContext) this.reactContext)
+      //   .getJSModule(RCTEventEmitter.class)
+      //   .receiveEvent(alphaMovieView.getId(), "onEnd", null);
     
       // Reset the flag after a short delay to avoid stack loops
       new Handler().postDelayed(() -> {
